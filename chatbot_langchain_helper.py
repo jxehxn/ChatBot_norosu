@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from dotenv import load_dotenv  # 추가
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
@@ -8,8 +9,14 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.schema import HumanMessage
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+# .env 파일 로드
+load_dotenv()  # .env 파일에서 환경 변수 읽기
+
 # OpenAI API 키 설정
-os.environ["OPENAI_API_KEY"] = "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"
+api_key = os.getenv("OPENAI_API_KEY")  # 환경 변수에서 API 키 로드
+if not api_key:
+    raise ValueError("OpenAI API Key가 설정되지 않았습니다. .env 파일을 확인하세요.")
+os.environ["OPENAI_API_KEY"] = api_key
 
 def load_excel_database(file_path):
     """엑셀 파일 로드 및 데이터프레임 반환."""
